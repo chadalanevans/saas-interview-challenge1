@@ -9,6 +9,7 @@
 ## Building The Project
 
 From the root of the project
+- "make deps" - to download the dependencies
 - "make build" - to build the services which will be in \<root\>/bin
 - "make test" - to run the tests
 - "docker build -t saas-interview-challenge1 ." - to build the project
