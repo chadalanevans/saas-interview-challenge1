@@ -12,7 +12,7 @@ From the root of the project
 - "make deps" - to download the dependencies
 - "make build" - to build the services which will be in \<root\>/bin
 - "make test" - to run the tests
-- "docker build -t saas-interview-challenge1 ." - to build the project
+- "docker build -t saas-interview-challenge1 ." - to build the docker image used by the compose file
 
 ## Running The Project
 From the root of the project
@@ -44,7 +44,7 @@ Some requirements / concepts we would like to see (either in code or at least ou
 
 - "How might this project be scaled?"
 
-    **Worker Service** - It depends on the requirements on what kind of workers need to be run and where the system could be hosted. If the workers tasks aren't too long and AWS is an option then using Lambda for the workers could be a good idea. Having the worker_service launch the jobs as containers in a kubernetes or swarm cluster could be another approach. Additionally the definition of work could be extended to include a platform variable. Then maybe certain jobs are launched via different channels where there might be a worker_service listening that can run a task on a GPU enabled host
+    **Worker Service** - It depends on the requirements on what kind of workers need to be run and where the system could be hosted. If the workers tasks aren't too long and AWS is an option then using Lambda for the workers could be a good idea. Having the worker_service launch the jobs as containers in a kubernetes or swarm cluster could be another approach. Additionally the definition of work could be extended to include a platform variable. Then maybe certain jobs based on the variable are launched via different channels where there might be a worker_service listening that can run a task on a GPU enabled host for example. Other tasks could still be run on a generic host.
 
     **Job Service** - Multiple instances of the service could be run behind a load balancer or as a service in something like Kubernetes or Cloud Foundry.
 
@@ -53,7 +53,7 @@ Some requirements / concepts we would like to see (either in code or at least ou
 
 - "How might one approach doing sequential versus parallel tasks?"
 
-    One approach for sequential could be to include a chain of execution as an optional field in the registration of the work. Workers could have a shared library that looks for their place in the chain once they are completed successfully and publishes the work as the next job type along with the payload that maintains any expected state. If working with larger amounts of data, then the data would have to be hosted on a shared resource.
+    One approach for sequential could be to include a chain of execution as an optional field in the registration of the work. Workers could have a shared library that looks for their place in the chain once they are completed successfully and publishes the work as the next job type along with the payload that maintains any expected state. If the worker has to do processing on large data, then the data would have to be hosted on a shared resource that any worker host could access.
 
     If the work for some reason needed to be isolated to the host that started the work, then a new worker type could be implemented that maintains the chain of work state and directly calls all of the workers as local functions. 
 
